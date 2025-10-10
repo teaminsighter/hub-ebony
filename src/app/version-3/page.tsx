@@ -1,4 +1,4 @@
-import Hero from '@/components/Hero'
+import HeroV3 from '@/components/HeroV3'
 import MarketData from '@/components/MarketData'
 import ProfessionalGuidance from '@/components/ProfessionalGuidance'
 import DubaiPropertyBenefits from '@/components/DubaiPropertyBenefits'
@@ -12,7 +12,7 @@ import FAQ from '@/components/FAQ'
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <Hero />
+      <HeroV3 />
       <MarketData />
       <ProfessionalGuidance />
       <DubaiPropertyBenefits />
