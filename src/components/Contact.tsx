@@ -1,4 +1,43 @@
+'use client'
+
+import { useState } from 'react'
+import { useAnalytics } from '@/lib/hooks/useAnalytics'
+
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { trackFormStart, trackFormSubmit, trackButtonClick } = useAnalytics()
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      // Track the lead submission
+      trackFormSubmit('consultation', formData)
+      
+      // Here you would typically send the data to your API
+      // await fetch('/api/contact', { method: 'POST', body: JSON.stringify(formData) })
+      
+      alert('Thank you! We\'ll get back to you soon.')
+      setFormData({ name: '', email: '', company: '', message: '' })
+    } catch (error) {
+      console.error('Form submission error:', error)
+      alert('There was an error submitting your form. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
   return (
     <section className="py-20 bg-white">
       <div className="container mx-auto px-6">
@@ -13,7 +52,7 @@ export default function Contact() {
         
         <div className="max-w-2xl mx-auto">
           <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-8 rounded-lg">
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit} onFocus={() => trackFormStart('consultation')}>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -22,8 +61,12 @@ export default function Contact() {
                   <input
                     type="text"
                     id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                     placeholder="Your name"
+                    required
                   />
                 </div>
                 
@@ -34,8 +77,12 @@ export default function Contact() {
                   <input
                     type="email"
                     id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                     placeholder="your@email.com"
+                    required
                   />
                 </div>
               </div>
@@ -47,6 +94,9 @@ export default function Contact() {
                 <input
                   type="text"
                   id="company"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   placeholder="Your company"
                 />
@@ -58,17 +108,23 @@ export default function Contact() {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
                   rows={4}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
                   placeholder="Describe your business needs..."
+                  required
                 ></textarea>
               </div>
               
               <button
                 type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 px-6 rounded-lg text-lg transition-colors"
+                disabled={isSubmitting}
+                onClick={() => trackButtonClick('Schedule Free Consultation', 'contact-form')}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-semibold py-4 px-6 rounded-lg text-lg transition-colors"
               >
-                Schedule Free Consultation
+                {isSubmitting ? 'Submitting...' : 'Schedule Free Consultation'}
               </button>
             </form>
             

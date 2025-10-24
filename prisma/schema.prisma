@@ -11,21 +11,1089 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Admin Users
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      AdminRole @default(CONTENT_MANAGER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  SALES_MANAGER
+  CONTENT_MANAGER
+}
+
+// Enhanced Clients
+model Client {
+  id                String   @id @default(cuid())
+  name              String
+  email             String   @unique
+  phone             String?
+  whatsapp          String?
+  company           String?
+  nationality       String?
+  residenceCountry  String?
+  profession        String?
+  investmentBudget  InvestmentBudget?
+  minBudget         Float?
+  maxBudget         Float?
+  preferredAreas    String?  // JSON array of preferred area IDs
+  riskTolerance     RiskTolerance?
+  investmentGoal    InvestmentGoal?
+  timeframe         String?  // "3-6 months", "6-12 months", "1+ years"
+  leadSource        LeadSource?
+  leadScore         Int      @default(0)
+  priority          ClientPriority @default(MEDIUM)
+  status            ClientStatus @default(PROSPECT)
+  stage             ClientStage @default(LEAD)
+  assignedTo        String?  // Admin user ID
+  tags              String?  // JSON array of tags
+  notes             String?
+  lastContact       DateTime?
+  nextFollowUp      DateTime?
+  communicationPreference String? // "Email", "Phone", "WhatsApp"
+  timezone          String   @default("Asia/Dubai")
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  consultations     Consultation[]
+  properties        ClientProperty[]
+  investments       Investment[]
+  tours             PropertyTour[]
+  interactions      ClientInteraction[]
+  documents         ClientDocument[]
+  leads             Lead[]
+  sessions          LeadSession[]
+
+  @@map("clients")
+}
+
+enum InvestmentBudget {
+  UNDER_500K
+  FROM_500K_TO_1M
+  FROM_1M_TO_2M
+  FROM_2M_TO_5M
+  ABOVE_5M
+}
+
+enum RiskTolerance {
+  CONSERVATIVE
+  MODERATE
+  AGGRESSIVE
+}
+
+enum InvestmentGoal {
+  CAPITAL_GROWTH
+  RENTAL_INCOME
+  MIXED
+  PORTFOLIO_DIVERSIFICATION
+  RESIDENCY_VISA
+}
+
+enum LeadSource {
+  WEBSITE
+  SOCIAL_MEDIA
+  REFERRAL
+  COLD_OUTREACH
+  EVENT
+  ADVERTISEMENT
+  PARTNER
+}
+
+enum ClientPriority {
+  LOW
+  MEDIUM
+  HIGH
+  VIP
+}
+
+enum ClientStage {
+  LEAD
+  QUALIFIED
+  PROPOSAL
+  NEGOTIATION
+  CLOSING
+  CLOSED
+  NURTURING
+}
+
+enum ClientStatus {
+  PROSPECT
+  QUALIFIED
+  ACTIVE_INVESTOR
+  CLOSED_DEAL
+  INACTIVE
+}
+
+// Property Areas
+model PropertyArea {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  description  String?
+  avgPrice     Float?
+  avgPricePerSqft Float?
+  priceGrowth  Float?   // Year over year growth percentage
+  rentalYield  Float?   // Average rental yield in the area
+  popularity   Int      @default(0) // Popularity score
+  coordinates  String?  // JSON with lat/lng
+  amenities    String?  // JSON array of area amenities
+  transport    String?  // JSON array of transport options
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  properties   Property[]
+  marketData   MarketData[]
+
+  @@map("property_areas")
+}
+
+// Developers
+model Developer {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  logo        String?
+  website     String?
+  phone       String?
+  email       String?
+  rating      Float?   // Average rating out of 5
+  totalProjects Int    @default(0)
+  established DateTime?
+  headquarters String?
+  specialties String?  // JSON array of specialties
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  properties  Property[]
+
+  @@map("developers")
+}
+
+// Enhanced Properties
+model Property {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  areaId          String?
+  developerId     String?
+  propertyType    PropertyType
+  subType         String?  // "Studio", "Penthouse", "Duplex"
+  bedrooms        Int?
+  bathrooms       Float?
+  sqft            Float?
+  sqftBalcony     Float?
+  price           Float
+  pricePerSqft    Float?
+  currency        String   @default("AED")
+  roi             Float?   // Expected ROI percentage
+  rentalYield     Float?   // Expected rental yield
+  serviceCharge   Float?   // Annual service charge
+  paymentPlan     String?  // JSON with payment plan details
+  completionDate  DateTime?
+  handoverDate    DateTime?
+  floor           Int?
+  parking         Int?     // Number of parking spaces
+  view            String?  // "Sea View", "City View", "Garden View"
+  furnishing      FurnishingType @default(UNFURNISHED)
+  images          String?  // JSON array of image URLs
+  floorPlan       String?  // Floor plan image URL
+  features        String?  // JSON array of features
+  amenities       String?  // JSON array of building amenities
+  coordinates     String?  // JSON with lat/lng
+  address         String?
+  status          PropertyStatus @default(AVAILABLE)
+  isActive        Boolean  @default(true)
+  isFeatured      Boolean  @default(false)
+  priority        Int      @default(0) // For sorting/ranking
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  area             PropertyArea? @relation(fields: [areaId], references: [id])
+  developer        Developer?    @relation(fields: [developerId], references: [id])
+  clientProperties ClientProperty[]
+  investments      Investment[]
+  documents        PropertyDocument[]
+  tours            PropertyTour[]
+
+  @@map("properties")
+}
+
+enum PropertyType {
+  APARTMENT
+  VILLA
+  TOWNHOUSE
+  PENTHOUSE
+  STUDIO
+  OFFICE
+  RETAIL
+  WAREHOUSE
+  LAND
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  SOLD
+  RESERVED
+  OFF_PLAN
+  READY
+  UNDER_CONSTRUCTION
+}
+
+enum FurnishingType {
+  FURNISHED
+  SEMI_FURNISHED
+  UNFURNISHED
+}
+
+// Client-Property relationship
+model ClientProperty {
+  id         String   @id @default(cuid())
+  clientId   String
+  propertyId String
+  status     InvestmentStatus @default(INTERESTED)
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  client     Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([clientId, propertyId])
+  @@map("client_properties")
+}
+
+enum InvestmentStatus {
+  INTERESTED
+  VIEWING_SCHEDULED
+  UNDER_REVIEW
+  OFFER_MADE
+  PURCHASED
+  REJECTED
+}
+
+// Consultations (Enhanced)
 model Consultation {
-  id            String   @id @default(cuid())
-  name          String
-  email         String
-  phone         String?
-  company       String?
-  date          DateTime
-  timezone      String   @default("Asia/Dubai")
-  duration      Int      @default(30) // minutes
-  status        String   @default("scheduled") // scheduled, completed, cancelled
-  googleEventId String?
-  ghlContactId  String?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String   @id @default(cuid())
+  clientId        String?
+  name            String
+  email           String
+  phone           String?
+  company         String?
+  date            DateTime
+  timezone        String   @default("Asia/Dubai")
+  duration        Int      @default(30) // minutes
+  status          ConsultationStatus @default(SCHEDULED)
+  meetingType     String   @default("video") // "video", "phone", "in-person"
+  googleEventId   String?
+  ghlContactId    String?
+  notes           String?
+  followUpDate    DateTime?
+  outcome         String?  // "Qualified", "Not Interested", "Follow Up Required"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  client          Client?  @relation(fields: [clientId], references: [id])
 
   @@map("consultations")
+}
+
+enum ConsultationStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  RESCHEDULED
+}
+
+// Content Management
+model PageContent {
+  id        String   @id @default(cuid())
+  pageKey   String   @unique // "hero", "market-data", "faq", etc.
+  content   String   // JSON content
+  version   String   @default("1.0")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("page_content")
+}
+
+// Analytics & Tracking - Enhanced
+
+// Enhanced Lead Tracking & Analytics
+model LeadSession {
+  id                String   @id @default(cuid())
+  sessionId         String   @unique // Browser session ID
+  userId            String?  // User ID if identified
+  ipAddress         String?
+  userAgent         String?
+  country           String?
+  city              String?
+  region            String?
+  timezone          String?
+  device            DeviceType?
+  browser           String?
+  os                String?
+  screenResolution  String?
+  language          String?
+  referrer          String?
+  landingPage       String?
+  isNewSession      Boolean  @default(true)
+  sessionStart      DateTime @default(now())
+  sessionEnd        DateTime?
+  totalDuration     Int?     // Duration in seconds
+  pageViews         Int      @default(0)
+  events            Int      @default(0)
+  isConverted       Boolean  @default(false)
+  conversionValue   Float?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Attribution data
+  utmSource         String?
+  utmMedium         String?
+  utmCampaign       String?
+  utmTerm           String?
+  utmContent        String?
+  gclid             String?  // Google Ads Click ID
+  fbclid            String?  // Facebook Click ID
+  msclkid           String?  // Microsoft Ads Click ID
+  ttclid            String?  // TikTok Click ID
+  twclid            String?  // Twitter Click ID
+  liclid            String?  // LinkedIn Click ID
+  snapclid          String?  // Snapchat Click ID
+  pinclid           String?  // Pinterest Click ID
+  yclid             String?  // Yandex Click ID
+  customClickId     String?  // Custom click tracking
+
+  // Relationships
+  sessionPageViews  PageView[] @relation("PageViewsToSession")
+  sessionEvents     UserEvent[] @relation("EventsToSession")
+  leads             Lead[]
+  client            Client?  @relation(fields: [userId], references: [id])
+
+  @@index([sessionId])
+  @@index([userId])
+  @@index([utmSource, utmMedium, utmCampaign])
+  @@index([gclid])
+  @@index([fbclid])
+  @@map("lead_sessions")
+}
+
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  OTHER
+}
+
+// Enhanced Page View Tracking
+model PageView {
+  id              String   @id @default(cuid())
+  sessionId       String
+  userId          String?
+  page            String   // Page path
+  pageTitle       String?
+  referrer        String?
+  timestamp       DateTime @default(now())
+  timeOnPage      Int?     // Time spent on page in seconds
+  scrollDepth     Float?   // Max scroll depth percentage
+  exitPage        Boolean  @default(false)
+  bounced         Boolean  @default(false)
+  
+  // Page performance metrics
+  loadTime        Float?   // Page load time in ms
+  domContentLoaded Float?  // DOM content loaded time in ms
+  firstPaint      Float?   // First paint time in ms
+  
+  session         LeadSession @relation("PageViewsToSession", fields: [sessionId], references: [sessionId], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([userId])
+  @@index([page])
+  @@index([timestamp])
+  @@map("page_views")
+}
+
+// Comprehensive Event Tracking
+model UserEvent {
+  id              String   @id @default(cuid())
+  sessionId       String
+  userId          String?
+  eventName       String   // "button_click", "form_submit", "video_play", etc.
+  eventCategory   EventCategory
+  eventAction     String?
+  eventLabel      String?
+  eventValue      Float?
+  page            String   // Page where event occurred
+  element         String?  // Element that triggered the event
+  elementText     String?  // Text content of element
+  elementId       String?  // Element ID
+  elementClass    String?  // Element CSS class
+  coordinates     String?  // Click coordinates (x,y)
+  customData      String?  // JSON string for custom event data
+  timestamp       DateTime @default(now())
+  
+  session         LeadSession @relation("EventsToSession", fields: [sessionId], references: [sessionId], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([userId])
+  @@index([eventName])
+  @@index([eventCategory])
+  @@index([timestamp])
+  @@map("user_events")
+}
+
+enum EventCategory {
+  ENGAGEMENT
+  CONVERSION
+  NAVIGATION
+  FORM_INTERACTION
+  MEDIA_INTERACTION
+  DOWNLOAD
+  SOCIAL
+  ERROR
+  CUSTOM
+}
+
+// Enhanced Lead Management
+model Lead {
+  id                String   @id @default(cuid())
+  sessionId         String?  // Link to session
+  clientId          String?  // Link to client if converted
+  
+  // Lead source attribution
+  originalSource    String?  // First touch attribution
+  lastSource        String?  // Last touch attribution
+  allSources        String?  // JSON array of all touch points
+  
+  // UTM and Click ID tracking
+  utmSource         String?
+  utmMedium         String?
+  utmCampaign       String?
+  utmTerm           String?
+  utmContent        String?
+  gclid             String?
+  fbclid            String?
+  msclkid           String?
+  ttclid            String?
+  twclid            String?
+  liclid            String?
+  snapclid          String?
+  pinclid           String?
+  yclid             String?
+  customClickId     String?
+  
+  // Lead form data
+  formType          String   // "contact", "consultation", "property_interest"
+  formData          String   // JSON string with form fields
+  
+  // Contact information
+  name              String?
+  email             String?
+  phone             String?
+  company           String?
+  message           String?
+  
+  // Lead qualification
+  leadScore         Int      @default(0)
+  leadGrade         LeadGrade @default(COLD)
+  leadStatus        LeadStatus @default(NEW)
+  isQualified       Boolean  @default(false)
+  qualifiedAt       DateTime?
+  qualifiedBy       String?  // Admin user ID
+  
+  // Behavioral data
+  pagesVisited      Int      @default(0)
+  timeOnSite        Int      @default(0) // Total time in seconds
+  visitsBeforeConversion Int @default(1)
+  eventsTriggered   Int      @default(0)
+  
+  // Repeat lead tracking
+  isRepeatLead      Boolean  @default(false)
+  originalLeadId    String?  // Reference to first lead
+  previousLeadCount Int      @default(0)
+  
+  // Timing data
+  firstVisit        DateTime?
+  lastVisit         DateTime?
+  conversionTime    DateTime @default(now())
+  
+  // Follow-up tracking
+  followUpDate      DateTime?
+  followUpStatus    FollowUpStatus @default(PENDING)
+  notes             String?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relationships
+  session           LeadSession? @relation(fields: [sessionId], references: [sessionId])
+  client            Client?      @relation(fields: [clientId], references: [id])
+  originalLead      Lead?        @relation("RepeatLeads", fields: [originalLeadId], references: [id])
+  repeatLeads       Lead[]       @relation("RepeatLeads")
+  activities        LeadActivity[]
+  touchpoints       LeadTouchpoint[]
+  
+  @@index([sessionId])
+  @@index([clientId])
+  @@index([email])
+  @@index([utmSource, utmMedium, utmCampaign])
+  @@index([gclid])
+  @@index([fbclid])
+  @@index([leadStatus])
+  @@index([conversionTime])
+  @@index([isRepeatLead])
+  @@map("leads")
+}
+
+enum LeadGrade {
+  HOT
+  WARM
+  COLD
+  UNQUALIFIED
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  NURTURING
+  CONVERTED
+  LOST
+  DUPLICATE
+}
+
+enum FollowUpStatus {
+  PENDING
+  SCHEDULED
+  COMPLETED
+  OVERDUE
+  CANCELLED
+}
+
+// Lead Activity Tracking
+model LeadActivity {
+  id            String   @id @default(cuid())
+  leadId        String
+  activityType  ActivityType
+  description   String
+  outcome       String?
+  nextAction    String?
+  scheduledFor  DateTime?
+  completedAt   DateTime?
+  createdBy     String?  // Admin user ID
+  createdAt     DateTime @default(now())
+  
+  lead          Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  @@index([leadId])
+  @@index([activityType])
+  @@index([scheduledFor])
+  @@map("lead_activities")
+}
+
+enum ActivityType {
+  CALL
+  EMAIL
+  MEETING
+  FOLLOW_UP
+  NOTE
+  STATUS_CHANGE
+  PROPERTY_SHOWN
+  PROPOSAL_SENT
+  CONTRACT_SENT
+}
+
+// Lead Attribution & Touchpoints
+model LeadTouchpoint {
+  id              String   @id @default(cuid())
+  leadId          String
+  sessionId       String?
+  touchpointType  TouchpointType
+  channel         String   // "organic", "paid", "social", "email", "direct"
+  source          String?  // "google", "facebook", "linkedin"
+  medium          String?  // "cpc", "organic", "email", "social"
+  campaign        String?
+  content         String?
+  term            String?
+  page            String?
+  timestamp       DateTime @default(now())
+  attribution     AttributionModel
+  weight          Float    @default(1.0) // Attribution weight
+  
+  lead            Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  
+  @@index([leadId])
+  @@index([touchpointType])
+  @@index([channel])
+  @@index([timestamp])
+  @@map("lead_touchpoints")
+}
+
+enum TouchpointType {
+  FIRST_TOUCH
+  LAST_TOUCH
+  MIDDLE_TOUCH
+  CONVERSION_TOUCH
+}
+
+enum AttributionModel {
+  FIRST_TOUCH
+  LAST_TOUCH
+  LINEAR
+  TIME_DECAY
+  POSITION_BASED
+  DATA_DRIVEN
+}
+
+// Marketing Campaign Performance
+model Campaign {
+  id              String   @id @default(cuid())
+  name            String
+  type            CampaignType
+  platform        String   // "google", "facebook", "linkedin", etc.
+  campaignId      String?  // External campaign ID
+  status          CampaignStatus @default(ACTIVE)
+  budget          Float?
+  spend           Float    @default(0)
+  startDate       DateTime
+  endDate         DateTime?
+  targetAudience  String?  // JSON description
+  creativeAssets  String?  // JSON array of assets
+  utmSource       String?
+  utmMedium       String?
+  utmCampaign     String?
+  
+  // Performance metrics
+  impressions     Int      @default(0)
+  clicks          Int      @default(0)
+  conversions     Int      @default(0)
+  cost            Float    @default(0)
+  revenue         Float    @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@index([platform])
+  @@index([status])
+  @@index([utmCampaign])
+  @@map("campaigns")
+}
+
+enum CampaignType {
+  SEARCH
+  DISPLAY
+  SOCIAL
+  EMAIL
+  VIDEO
+  RETARGETING
+  AFFILIATE
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+// A/B Testing & Experiments
+model Experiment {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  hypothesis      String?
+  type            ExperimentType
+  status          ExperimentStatus @default(DRAFT)
+  trafficSplit    Float    @default(50) // Percentage for variant
+  startDate       DateTime?
+  endDate         DateTime?
+  
+  // Statistical significance
+  confidenceLevel Float    @default(95)
+  minSampleSize   Int      @default(1000)
+  currentSampleSize Int    @default(0)
+  
+  // Metrics
+  controlConversions Int   @default(0)
+  variantConversions Int   @default(0)
+  controlVisitors    Int   @default(0)
+  variantVisitors    Int   @default(0)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  variants        ExperimentVariant[]
+  
+  @@map("experiments")
+}
+
+enum ExperimentType {
+  AB_TEST
+  MULTIVARIATE
+  SPLIT_URL
+}
+
+enum ExperimentStatus {
+  DRAFT
+  RUNNING
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+model ExperimentVariant {
+  id            String   @id @default(cuid())
+  experimentId  String
+  name          String
+  description   String?
+  isControl     Boolean  @default(false)
+  trafficWeight Float    @default(50)
+  config        String?  // JSON configuration
+  
+  experiment    Experiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+  
+  @@map("experiment_variants")
+}
+
+model Conversion {
+  id           String   @id @default(cuid())
+  sessionId    String?
+  leadId       String?
+  page         String   // Which page the conversion happened on
+  type         String   // "consultation_booking", "contact_form"
+  clientEmail  String
+  value        Float?   // Conversion value
+  timestamp    DateTime @default(now())
+  
+  @@index([sessionId])
+  @@index([leadId])
+  @@index([type])
+  @@index([timestamp])
+  @@map("conversions")
+}
+
+// Investment Management
+model Investment {
+  id              String   @id @default(cuid())
+  clientId        String
+  propertyId      String
+  amount          Float
+  currency        String   @default("AED")
+  investmentType  InvestmentType
+  investmentDate  DateTime
+  expectedROI     Float?
+  actualROI       Float?
+  status          InvestmentStatusEnum @default(PENDING)
+  stage           InvestmentStage @default(INITIAL_INTEREST)
+  paymentSchedule String?  // JSON with payment schedule
+  documents       String?  // JSON array of document URLs
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  client          Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  property        Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  transactions    Transaction[]
+  investmentDocuments InvestmentDocument[]
+
+  @@map("investments")
+}
+
+enum InvestmentType {
+  PURCHASE
+  LEASE
+  RENT_TO_OWN
+  PARTNERSHIP
+}
+
+enum InvestmentStatusEnum {
+  PENDING
+  APPROVED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  ON_HOLD
+}
+
+enum InvestmentStage {
+  INITIAL_INTEREST
+  PROPERTY_VIEWING
+  DUE_DILIGENCE
+  OFFER_SUBMITTED
+  NEGOTIATION
+  LEGAL_REVIEW
+  FINANCING
+  CLOSING
+  COMPLETED
+}
+
+// Financial Transactions
+model Transaction {
+  id              String   @id @default(cuid())
+  investmentId    String
+  type            TransactionType
+  amount          Float
+  currency        String   @default("AED")
+  description     String?
+  reference       String?
+  status          TransactionStatus @default(PENDING)
+  dueDate         DateTime?
+  paidDate        DateTime?
+  method          PaymentMethod?
+  receipt         String?  // Receipt file URL
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  investment      Investment @relation(fields: [investmentId], references: [id], onDelete: Cascade)
+
+  @@map("transactions")
+}
+
+enum TransactionType {
+  BOOKING_FEE
+  DOWN_PAYMENT
+  INSTALLMENT
+  FINAL_PAYMENT
+  SERVICE_CHARGE
+  MAINTENANCE_FEE
+  COMMISSION
+  REFUND
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CREDIT_CARD
+  CHEQUE
+  CASH
+  CRYPTOCURRENCY
+  FINANCING
+}
+
+// Market Data & Analytics
+model MarketData {
+  id              String   @id @default(cuid())
+  areaId          String?
+  propertyType    PropertyType?
+  period          String   // "2024-Q1", "2024-01"
+  avgPrice        Float
+  avgPricePerSqft Float?
+  medianPrice     Float?
+  priceChange     Float    // Percentage change
+  volume          Int      // Number of transactions
+  rentalYield     Float?
+  roi             Float?
+  demandScore     Float?   // 0-100 demand indicator
+  supplyScore     Float?   // 0-100 supply indicator
+  dataSource      String?  // "DLD", "Internal", "External"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  area            PropertyArea? @relation(fields: [areaId], references: [id])
+
+  @@unique([areaId, propertyType, period])
+  @@map("market_data")
+}
+
+// Property Tours & Viewings
+model PropertyTour {
+  id           String   @id @default(cuid())
+  clientId     String
+  propertyId   String
+  scheduledAt  DateTime
+  duration     Int      @default(60) // minutes
+  status       TourStatus @default(SCHEDULED)
+  type         TourType @default(PHYSICAL)
+  attendees    Int      @default(1)
+  feedback     String?
+  rating       Int?     // 1-5 rating
+  interested   Boolean  @default(false)
+  followUp     Boolean  @default(false)
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  client       Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  property     Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_tours")
+}
+
+enum TourStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+  RESCHEDULED
+}
+
+enum TourType {
+  PHYSICAL
+  VIRTUAL
+  VIDEO_CALL
+}
+
+// Client Interactions & Communication
+model ClientInteraction {
+  id           String   @id @default(cuid())
+  clientId     String
+  type         InteractionType
+  channel      CommunicationChannel
+  subject      String?
+  content      String?
+  direction    InteractionDirection
+  status       InteractionStatus @default(COMPLETED)
+  scheduledAt  DateTime?
+  completedAt  DateTime?
+  duration     Int?     // minutes
+  outcome      String?
+  followUp     Boolean  @default(false)
+  followUpDate DateTime?
+  tags         String?  // JSON array
+  attachments  String?  // JSON array of file URLs
+  createdBy    String?  // Admin user ID
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  client       Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("client_interactions")
+}
+
+enum InteractionType {
+  CALL
+  EMAIL
+  MEETING
+  WHATSAPP
+  SMS
+  PROPERTY_VIEWING
+  FOLLOW_UP
+  SUPPORT
+  PRESENTATION
+}
+
+enum CommunicationChannel {
+  PHONE
+  EMAIL
+  WHATSAPP
+  SMS
+  IN_PERSON
+  VIDEO_CALL
+  SOCIAL_MEDIA
+  WEBSITE
+}
+
+enum InteractionDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum InteractionStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_RESPONSE
+  RESCHEDULED
+}
+
+// Document Management
+model PropertyDocument {
+  id          String   @id @default(cuid())
+  propertyId  String
+  name        String
+  type        DocumentType
+  url         String
+  size        Int?     // File size in bytes
+  mimeType    String?
+  description String?
+  isPublic    Boolean  @default(false)
+  uploadedBy  String?  // Admin user ID
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_documents")
+}
+
+model ClientDocument {
+  id          String   @id @default(cuid())
+  clientId    String
+  name        String
+  type        DocumentType
+  url         String
+  size        Int?
+  mimeType    String?
+  description String?
+  isVerified  Boolean  @default(false)
+  uploadedBy  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  client      Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@map("client_documents")
+}
+
+model InvestmentDocument {
+  id           String   @id @default(cuid())
+  investmentId String
+  name         String
+  type         DocumentType
+  url          String
+  size         Int?
+  mimeType     String?
+  description  String?
+  isRequired   Boolean  @default(false)
+  isVerified   Boolean  @default(false)
+  uploadedBy   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  investment   Investment @relation(fields: [investmentId], references: [id], onDelete: Cascade)
+
+  @@map("investment_documents")
+}
+
+enum DocumentType {
+  PASSPORT
+  VISA
+  EMIRATES_ID
+  SALARY_CERTIFICATE
+  BANK_STATEMENT
+  NOC
+  POWER_OF_ATTORNEY
+  FLOOR_PLAN
+  BROCHURE
+  PRICE_LIST
+  PAYMENT_PLAN
+  CONTRACT
+  RECEIPT
+  INVOICE
+  OTHER
 }
