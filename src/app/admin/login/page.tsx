@@ -47,7 +47,7 @@ export default function LoginPage() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
           <CardDescription className="text-center">
-            Sign in to access the Hub Ebony admin panel
+            Sign in to access the CommercialDXB admin panel
           </CardDescription>
         </CardHeader>
         <CardContent>

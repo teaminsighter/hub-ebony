@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CommercialDXB - Dubai Property Investment Platform
 
-## Getting Started
+A comprehensive platform for Dubai commercial property investment consultations and lead management.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Landing Page** with property investment information
+- **Calendar Booking System** for consultations
+- **Admin Dashboard** with comprehensive analytics
+- **Lead Tracking** with UTM parameters and click ID support
+- **Real-time Analytics** and reporting
+- **WhatsApp & Email Integration**
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Backend**: Next.js API Routes, Prisma ORM
+- **Database**: SQLite (development), PostgreSQL (production)
+- **Authentication**: NextAuth.js
+- **Styling**: Tailwind CSS
+- **Analytics**: Custom data layer with comprehensive tracking
+
+## Quick Start
+
+1. **Clone and Install**
+   ```bash
+   git clone https://github.com/teaminsighter/hub-ebony.git
+   cd hub-ebony
+   npm install
+   ```
+
+2. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+3. **Database Setup**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+4. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
+
+## Deployment on Vercel
+
+### Environment Variables Required:
+
+```
+DATABASE_URL=your-production-database-url
+NEXTAUTH_URL=https://your-domain.vercel.app
+NEXTAUTH_SECRET=your-secure-secret-key
+ADMIN_EMAIL=admin@commercialdxb.com
+ADMIN_PASSWORD=YourSecurePassword123!
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Deploy Steps:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Connect to Vercel**
+   - Import repository from GitHub
+   - Framework: Next.js (auto-detected)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Configure Environment Variables**
+   - Add all required variables in Vercel dashboard
+   - Generate secure NEXTAUTH_SECRET: `openssl rand -base64 32`
 
-## Learn More
+3. **Deploy**
+   - Click Deploy
+   - Vercel will automatically run the build process
 
-To learn more about Next.js, take a look at the following resources:
+## Admin Panel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Access the admin panel at `/admin/login` with your configured credentials.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Features:**
+- Dashboard with key metrics
+- Client management
+- Consultation scheduling
+- Analytics and reporting
+- Content management
+- Settings configuration
 
-## Deploy on Vercel
+## Analytics & Tracking
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The platform includes comprehensive tracking:
+- UTM parameter capture
+- Click ID tracking (Google, Facebook, etc.)
+- User behavior analytics
+- Lead attribution
+- Real-time dashboard
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contact Integration
+
+- **WhatsApp**: Direct messaging integration
+- **Email**: Automated consultation booking
+- **Calendar**: Real-time availability checking
+
+## License
+
+Private - CommercialDXB Platform
+
+---
+
+Built with ❤️ for Dubai property investment

@@ -23,7 +23,7 @@ export function AdminHeader({ navItems }: AdminHeaderProps) {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center">
               <h1 className="text-2xl font-semibold text-gray-900">
-                Admin Dashboard
+                CommercialDXB Admin
               </h1>
             </div>
             

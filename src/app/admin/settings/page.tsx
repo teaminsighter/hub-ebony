@@ -47,7 +47,7 @@ interface AdminSettings {
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<AdminSettings>({
-    siteName: 'Hub Ebony',
+    siteName: 'CommercialDXB',
     siteUrl: 'https://hubebony.com',
     contactEmail: 'contact@hubebony.com',
     businessHours: {
@@ -241,7 +241,7 @@ export default function SettingsPage() {
                 <Input
                   value={settings.siteName}
                   onChange={(e) => updateSettings('siteName', e.target.value)}
-                  placeholder="Hub Ebony"
+                  placeholder="CommercialDXB"
                 />
               </div>
               <div>
@@ -487,7 +487,7 @@ export default function SettingsPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
                       <input 
                         type="text" 
-                        defaultValue="Hub Ebony Real Estate"
+                        defaultValue="CommercialDXB Real Estate"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md"
                       />
                     </div>

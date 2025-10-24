@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hub Ebony - Premium Dubai Property Investment",
-  description: "Discover exclusive Dubai property investment opportunities with Hub Ebony. Expert guidance for luxury real estate investments in Dubai's prime locations.",
+  title: "CommercialDXB - Premium Dubai Property Investment",
+  description: "Discover exclusive Dubai property investment opportunities with CommercialDXB. Expert guidance for luxury real estate investments in Dubai's prime locations.",
 };
 
 export default function RootLayout({

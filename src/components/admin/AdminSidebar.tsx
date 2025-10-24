@@ -144,7 +144,7 @@ export function AdminSidebar() {
       <div className="flex items-center justify-center h-16 px-4 bg-blue-600">
         <Link href="/" className="flex items-center space-x-2 text-white">
           <Home className="h-6 w-6" />
-          <span className="text-lg font-semibold">Hub Ebony</span>
+          <span className="text-lg font-semibold">CommercialDXB</span>
         </Link>
       </div>
       

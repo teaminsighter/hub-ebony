@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
-            <h3 className="text-2xl font-bold mb-4">Hub Ebony</h3>
+            <h3 className="text-2xl font-bold mb-4">CommercialDXB</h3>
             <p className="text-gray-300 mb-4 max-w-md">
               Professional consultation services helping businesses grow and succeed in today's competitive market.
             </p>
@@ -52,7 +52,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; 2024 Hub Ebony. All rights reserved.</p>
+          <p>&copy; 2024 CommercialDXB. All rights reserved.</p>
         </div>
       </div>
     </footer>

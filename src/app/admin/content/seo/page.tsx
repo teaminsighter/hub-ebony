@@ -84,7 +84,7 @@ export default function SEOPage() {
       metaDescription: 'Discover luxury properties in Downtown Dubai. Premium apartments and penthouses with Burj Khalifa views. Expert investment guidance and exclusive deals.',
       keywords: ['downtown dubai properties', 'burj khalifa view', 'luxury apartments', 'dubai investment', 'premium real estate'],
       canonicalUrl: 'https://hubebony.com/properties/downtown-dubai',
-      ogTitle: 'Downtown Dubai Luxury Properties | Hub Ebony',
+      ogTitle: 'Downtown Dubai Luxury Properties | CommercialDXB',
       ogDescription: 'Premium Downtown Dubai properties with stunning skyline views. Professional investment consultation and exclusive property access.',
       ogImage: 'https://hubebony.com/images/downtown-dubai-og.jpg',
       twitterTitle: 'Downtown Dubai Premium Properties',
@@ -108,7 +108,7 @@ export default function SEOPage() {
       metaDescription: 'Complete guide to investing in Dubai real estate. Market insights, ROI analysis, legal requirements, and expert tips for property investors.',
       keywords: ['dubai property investment', 'real estate guide', 'property roi', 'dubai market analysis', 'investment tips'],
       canonicalUrl: 'https://hubebony.com/investment-guide',
-      ogTitle: 'Dubai Property Investment Guide 2024 | Hub Ebony',
+      ogTitle: 'Dubai Property Investment Guide 2024 | CommercialDXB',
       ogDescription: 'Comprehensive Dubai property investment guide with market analysis, ROI calculations, and expert recommendations.',
       ogImage: 'https://hubebony.com/images/investment-guide-og.jpg',
       twitterTitle: 'Dubai Property Investment Guide 2024',
@@ -132,7 +132,7 @@ export default function SEOPage() {
       metaDescription: 'Exclusive Palm Jumeirah properties including luxury villas and waterfront apartments. Premium beachfront living with world-class amenities.',
       keywords: ['palm jumeirah properties', 'luxury villas', 'waterfront apartments', 'beachfront living', 'dubai luxury real estate'],
       canonicalUrl: 'https://hubebony.com/properties/palm-jumeirah',
-      ogTitle: 'Palm Jumeirah Luxury Properties | Hub Ebony',
+      ogTitle: 'Palm Jumeirah Luxury Properties | CommercialDXB',
       ogDescription: 'Luxury Palm Jumeirah villas and apartments with private beach access and stunning water views.',
       ogImage: 'https://hubebony.com/images/palm-jumeirah-og.jpg',
       twitterTitle: 'Palm Jumeirah Luxury Properties',
@@ -745,7 +745,7 @@ export default function SEOPage() {
                     <Input
                       value={newPage.ogTitle || ''}
                       onChange={(e) => setNewPage(prev => ({ ...prev, ogTitle: e.target.value }))}
-                      placeholder="Downtown Dubai Luxury Properties | Hub Ebony"
+                      placeholder="Downtown Dubai Luxury Properties | CommercialDXB"
                     />
                   </div>
                   <div>

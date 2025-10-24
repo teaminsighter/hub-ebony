@@ -17,11 +17,11 @@ export interface DataLayerEvent {
 declare global {
   interface Window {
     dataLayer: any[]
-    hubEbonyAnalytics: HubEbonyAnalytics
+    hubEbonyAnalytics: CommercialDXBAnalytics
   }
 }
 
-class HubEbonyAnalytics {
+class CommercialDXBAnalytics {
   private sessionId: string
   private userId?: string
   private sessionStart: Date
@@ -457,12 +457,12 @@ class HubEbonyAnalytics {
 // Initialize analytics when script loads
 export function initializeAnalytics() {
   if (typeof window !== 'undefined' && !window.hubEbonyAnalytics) {
-    new HubEbonyAnalytics()
+    new CommercialDXBAnalytics()
   }
 }
 
 // Export for manual initialization
-export { HubEbonyAnalytics }
+export { CommercialDXBAnalytics }
 
 // Auto-initialize in browser
 if (typeof window !== 'undefined') {

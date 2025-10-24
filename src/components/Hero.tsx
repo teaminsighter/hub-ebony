@@ -7,10 +7,10 @@ export default function Hero() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-blue-900 mb-4">
-            Why Dubai Commercial Property Outperforms
+            CommercialDXB - Dubai's Premier Property Investment Platform
           </h1>
           <p className="text-lg text-gray-600">
-            Commercial market the smart choice for investors seeking superior returns
+            Discover why Dubai commercial properties are the smart choice for investors seeking superior returns
           </p>
         </div>
 

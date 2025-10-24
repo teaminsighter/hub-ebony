@@ -779,7 +779,7 @@ export default function CalendarViewPage() {
                 <textarea 
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                   rows={8}
-                  placeholder={`Dear ${selectedConsultation.name},\n\nThis is a reminder about your upcoming consultation scheduled for ${new Date(selectedConsultation.date).toLocaleString()}.\n\nMeeting Type: ${selectedConsultation.meetingType}\nDuration: ${selectedConsultation.duration} minutes\n\nWe look forward to speaking with you.\n\nBest regards,\nHub Ebony Team`}
+                  placeholder={`Dear ${selectedConsultation.name},\n\nThis is a reminder about your upcoming consultation scheduled for ${new Date(selectedConsultation.date).toLocaleString()}.\n\nMeeting Type: ${selectedConsultation.meetingType}\nDuration: ${selectedConsultation.duration} minutes\n\nWe look forward to speaking with you.\n\nBest regards,\nCommercialDXB Team`}
                 />
               </div>
             </div>

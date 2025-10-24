@@ -12,7 +12,7 @@ export async function GET() {
 
     // Return demo settings data
     const settings = {
-      siteName: 'Hub Ebony',
+      siteName: 'CommercialDXB',
       siteUrl: 'https://hubebony.com',
       contactEmail: 'contact@hubebony.com',
       businessHours: {
